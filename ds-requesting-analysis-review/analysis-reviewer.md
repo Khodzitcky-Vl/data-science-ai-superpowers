@@ -41,6 +41,8 @@ You are reviewing a data science analysis for methodological soundness and decis
 - Parameters, windows, and exclusions explicit?
 - Notebook or script rerunnable without hidden state?
 - Notebook self-contained by default, or any external helper module clearly justified and versioned?
+- Do non-obvious filters, joins or dedup steps, metric definitions, and validation blocks have concise explanatory comments or markdown context?
+- Is the code free of noisy line-by-line comments on obvious operations?
 - Final tables and narrative consistent?
 - Limitations documented?
 
@@ -60,10 +62,10 @@ You are reviewing a data science analysis for methodological soundness and decis
 [Invalid causal claim, broken metric, wrong unit, unreproducible result, missing core validation]
 
 #### Important (Should Fix)
-[Weak robustness, unclear assumptions, insufficient sensitivity analysis, missing limitation]
+[Weak robustness, unclear assumptions, insufficient sensitivity analysis, missing limitation, missing concise comments on non-obvious analytical logic]
 
 #### Minor (Nice to Have)
-[Presentation clarity, extra plots, memo wording improvements]
+[Presentation clarity, extra plots, memo wording improvements, over-commented obvious code]
 
 **For each issue:**
 - Artifact reference

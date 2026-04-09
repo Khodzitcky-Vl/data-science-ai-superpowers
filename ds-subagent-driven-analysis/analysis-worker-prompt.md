@@ -34,7 +34,9 @@ Task tool (general-purpose):
     3. Rerun relevant SQL or notebook steps
     4. Save or report the requested artifacts
     5. Verify the outputs against the task requirements
-    6. Self-review before reporting back
+    6. Add minimal comments only where intent, methodology, or validation logic would otherwise be non-obvious
+    7. Prefer one short comment or markdown explanation before a complex block over line-by-line narration
+    8. Self-review before reporting back
 
     Work from: [directory]
 
@@ -58,6 +60,8 @@ Task tool (general-purpose):
     - Can the notebook section or query be rerun cleanly?
     - Are parameters, filters, and windows explicit?
     - Did I avoid adding unnecessary external helper modules for notebook-only logic?
+    - Did I add concise comments for non-obvious filters, exclusions, joins or dedup logic, metric definitions, and validation steps?
+    - Did I avoid commenting obvious operations line by line?
     - Do the written conclusions match the outputs?
 
     If you find issues during self-review, fix them before reporting.

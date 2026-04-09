@@ -13,7 +13,7 @@ If a `ds-` skill applies to the current analytical task, you do not get to skip 
 
 ## How to Access Skills
 
-Local project skills live in `.claude/skills`.
+```python
 
 Invoke the relevant local `ds-` skill before responding or acting. Do not rely on memory alone.
 
@@ -126,6 +126,12 @@ User instructions define WHAT to analyze, validate, or conclude. They do not can
 
 - For notebook-heavy analysis, the default artifact is one self-contained notebook, not a notebook plus ad hoc helper modules
 - Prefer notebook-local helper functions for one-off analytical logic; split code into separate `.py` modules only for real reuse, productionization, or a strong technical constraint
+- Add minimal comments only where intent, methodology, business rules, or validation logic would otherwise be non-obvious
+- Prefer one short block comment or markdown explanation over line-by-line narration
+- Comment non-obvious filters, exclusions, joins or dedup logic, metric definitions, CUPED or linearization blocks, and validation cells
+- Do not comment trivial pandas, SQL, or plotting operations that are already self-explanatory
+- Plan and implement visible runtime progress for long-running analytical work: default to `from tqdm.auto import tqdm` for loops or chunked tasks, then add stage labels, timing, polling status, row-count checkpoints, or status cells for long SQL and heavy notebook sections
+- Do not leave a human staring at a silent notebook cell or terminal while heavy analytical code is running
 - Default verification uses notebook reruns, SQL reruns, validation checks, and saved analytical artifacts
 - Do not assume `pytest`, unit-test style workflows, or TDD unless the user explicitly asks for software engineering work
 - Do not assume any special git-worktree setup is required for notebook analysis

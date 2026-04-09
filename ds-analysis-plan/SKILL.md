@@ -11,6 +11,8 @@ Turn a research question into a reproducible execution plan. The plan should be 
 
 For notebook projects, the default analytical artifact is a self-contained notebook. Do not assume a notebook should be split into extra `.py` helper modules unless the plan can justify that dependency.
 
+Plans must also specify runtime observability. Do not plan silent long-running loops, chunked jobs, or opaque SQL execution. Default to `tqdm` for loops and chunked work, then add visible stage or status output for SQL and other heavy steps.
+
 **Use after:** `ds-brainstorming` or `ds-experiment-design`
 
 **Next skill after planning:** `ds-subagent-driven-analysis` for same-session execution, `ds-executing-plans` for a separate execution session
@@ -33,7 +35,10 @@ Every plan should start with:
 **Notebook shape:** self-contained notebook by default; justify any extra module or script dependency
 **Methods:** SQL extracts, notebook steps, statistical tests, variance reduction
 **Artifacts:** notebook path, query path, output tables, final memo
+**Verification mode:** `report-only` | `strict`
 ```
+
+Default for notebooks: `report-only`. Notebook verification should name the reader-facing output artifact, such as a summary table, manifest, or diagnostic cell, and the explicit pass/fail indicator that will appear there.
 
 ## Task Granularity
 
@@ -53,10 +58,21 @@ Use small steps. Each step should produce one observable artifact.
 - Files or notebooks to edit
 - Exact query or section to run
 - Expected output shape
-- Verification command or validation check
+- Verification artifact: summary table, manifest, diagnostic cell, command output, or other visible output
+- Validation check plus pass/fail indicator: column, summary flag, or explicit diagnostic output
+- Verification mode: `report-only` or `strict` (default for notebooks: `report-only`)
 - Interpretation note: what a pass or fail means
+- Readability note: which non-obvious steps require a short code comment or markdown explanation
+- Runtime observability note: how progress will be visible while the task runs; default to `tqdm` for loops or chunked work, plus concise stage, timing, status, or row-count output for long SQL and heavy cells
 - Packaging note: stay self-contained in the notebook unless an external dependency is explicitly justified
 - Parallelization note: `sequential`, `parallel-safe`, or `blocked-by-[task]`
+
+## Runtime Observability
+
+- Any loop or chunked operation that may run long should be planned with `from tqdm.auto import tqdm`
+- Long SQL or remote jobs should expose progress through available job state, polling status, elapsed time, stage labels, or visible row-count checkpoints
+- Heavy notebook sections should emit concise progress signals that a human can watch, such as stage banners, chunk counters, timing summaries, or diagnostic status cells
+- Prefer a few high-signal progress updates over noisy per-row logging
 
 ## Method Selection
 

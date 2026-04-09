@@ -9,6 +9,8 @@ Execute plan by dispatching a fresh subagent per task, with two-stage review aft
 
 For notebook projects, the default expectation is still a self-contained notebook. Workers should not create extra helper modules for one-off analytical logic unless the task explicitly justifies that dependency.
 
+Workers must preserve runtime observability from the plan. Long loops, chunked jobs, and SQL-heavy steps should not run silently; default to `tqdm` for iterable work and add visible status or timing output elsewhere.
+
 **Core principle:** Fresh subagent per task + two-stage review (methodology then reproducibility/interpretation) = high quality, fast iteration
 
 **Use after:** `ds-analysis-plan`
@@ -153,7 +155,7 @@ When several tasks are truly independent:
 ## Reviewer Focus
 
 - Methodology review: unit alignment, metric correctness, statistical method, leakage, bias
-- Reproducibility review: rerun stability, parameter clarity, notebook self-containment, final tables or plots, wording of conclusions
+- Reproducibility review: rerun stability, parameter clarity, notebook self-containment, final tables or plots, wording of conclusions, whether non-obvious analytical logic has concise explanatory comments, and whether long-running work has visible progress signals
 
 ## Advantages
 
@@ -192,10 +194,11 @@ When several tasks are truly independent:
 
 - One worker handles multiple unrelated tasks with stale context
 - Review starts before the result is rerun
-- Style comments block methodology comments
+- Style-only comments block methodology comments, but missing comments on non-obvious analytical logic are still valid reproducibility issues
 - The controller trusts a worker summary without checking artifacts
 - Parallel workers edit the same notebook or output table
 - Skip review loops after issues are found
 - Start reproducibility review before methodology review is green
 - Move to next task while either review has open issues
 - A worker moves one-off notebook logic into a new `.py` helper module without explicit task justification
+- A worker leaves long loops, chunked transforms, or SQL-heavy tasks without `tqdm`, status output, or any other visible progress signal

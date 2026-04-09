@@ -59,6 +59,15 @@ Do not implement a partial subset if the unresolved item could change the method
 - Does the suggestion break comparability with the primary metric definition?
 - Is more data needed to resolve the disagreement?
 
+## Feedback On Notebook Readability
+
+When feedback targets notebook readability, keep the validation logic but refactor its presentation before defending the original implementation.
+
+If the issue is analyst UX rather than methodology:
+- Preserve the analytical checks
+- Convert fail-fast notebook checks into reader-facing summaries, manifests, or diagnostic cells when that improves readability
+- Debate the methodology only after the presentation form is cleaned up
+
 ## Valid Pushback
 
 Push back when the comment:

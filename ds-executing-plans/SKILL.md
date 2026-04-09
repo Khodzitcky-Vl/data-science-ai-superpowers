@@ -11,6 +11,10 @@ Load the analysis plan, challenge it, then execute in small batches with review 
 
 When the artifact is a notebook project, prefer improving the notebook in place. Do not create new helper modules by default unless the plan explicitly justifies them.
 
+In notebooks, verification should be reader-facing first: emit summary tables, manifests, or diagnostic cells with explicit pass/fail columns. Avoid scattered fail-fast exceptions. If strict enforcement is needed, put it in one final optional validation cell.
+
+Execution should preserve runtime observability from the plan. Do not let long loops, chunked transforms, or SQL steps run silently; default to `tqdm` for iterable work and add visible status or timing output for heavier steps.
+
 **Core principle:** Batch execution with checkpoints for methodological review.
 
 **Announce at start:** "I'm using the ds-executing-plans skill to execute this analysis plan."
@@ -70,6 +74,15 @@ Each checkpoint should include:
 - What tables or plots were produced
 - What validation checks passed or failed
 - What changed in the current interpretation
+- For notebook work, visible verification artifacts such as summary tables, manifests, or diagnostic cells instead of interleaved fail-fast exceptions
+- What runtime progress signals were added or observed for long-running SQL, loops, or heavy notebook sections
+
+## Runtime Observability
+
+- Default to `from tqdm.auto import tqdm` for loops, chunked pandas work, batch API calls, and other iterable execution
+- For SQL or remote jobs, show whatever the system can expose: query label, stage label, elapsed time, polling status, job id, chunk count, or row-count checkpoints
+- If the tool has no native progress API, add concise stage-start and stage-finish messages with timings instead of leaving a blank cell or silent terminal wait
+- Keep progress output human-readable; avoid log spam that hides failures
 
 ## Stop and Ask For Help
 
@@ -97,8 +110,14 @@ Do not force through blockers.
 - Stop when blocked, do not guess
 - Keep one-off analytical logic inside the notebook unless an external module was explicitly justified in the plan
 - Use notebook reruns, SQL reruns, validation checks, and artifact inspection as verification evidence
+- Add minimal comments only where the analytical intent is not obvious from the code itself
+- Prefer one short comment or markdown explanation before a non-obvious block over line-by-line narration
+- Comment non-obvious filters, exclusions, joins or dedup logic, metric definitions, variance-reduction blocks, and validation cells
+- In notebooks, default verification to reader-facing outputs; use one final optional strict-validation block only when hard enforcement is truly needed
 - Do not introduce unit-test or `pytest` workflow unless the task explicitly becomes software engineering
 - No special git-worktree procedure is required for this DS workflow
+- Treat runtime observability as part of execution quality, not as optional polish
+- Do not leave heavy loops or long SQL without visible progress; use `tqdm` by default and add status, timing, or row-count signals where `tqdm` does not apply
 
 ## Common Mistakes
 
