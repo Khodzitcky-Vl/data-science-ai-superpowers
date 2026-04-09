@@ -169,19 +169,6 @@ The entry point. Automatically detects what kind of analytical work you're doing
 
 ---
 
-## Ready-Made Bundles
-
-Pick a bundle that matches how you work:
-
-| Bundle | Skills | Best for |
-|--------|--------|----------|
-| **`analytics-core`** | 7 skills | Everyday analytics — planning, validation, debugging, reproducibility |
-| **`notebook-research`** | 10 skills | Notebook-heavy research with analysis review workflow |
-| **`ab-experimentation`** | 7 skills | Experiment design, metric validation, and parallel execution |
-| **`all-skills`** | 13 skills | Everything — the full toolkit |
-
----
-
 ## Quick Start
 
 ### Prerequisites
@@ -199,30 +186,18 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-- [**skilz**](https://pypi.org/project/skilz/) — needed only if you install skills one by one:
-
-```bash
-pip install skilz
-```
-
-### Install a bundle
+### Install all skills
 
 ```bash
 # Claude Code
 uvx --from git+https://github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
-  analytics-ai-installer install analytics-core --agent claude --repo Khodzitcky-Vl/data-science-ai-superpowers
+  analytics-ai-installer install all-skills --agent claude --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
 ```bash
 # Codex
 uvx --from git+https://github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
-  analytics-ai-installer install analytics-core --agent codex --repo Khodzitcky-Vl/data-science-ai-superpowers
-```
-
-### Install a single skill
-
-```bash
-skilz install --git https://github.com/Khodzitcky-Vl/data-science-ai-superpowers --skill ds-analysis-plan --agent codex
+  analytics-ai-installer install all-skills --agent codex --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
 ---
