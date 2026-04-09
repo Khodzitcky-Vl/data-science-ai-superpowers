@@ -1,0 +1,50 @@
+# Analytics AI Skills - Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+build/
+dist/
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Tooling state
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.skilz-manifest.yaml
+
+# Local assistant state
+.claude/
+.codex/
+
+# Secrets and local env
+.env
+*.env.local
+secrets.json
+credentials.json
+
+# Notebook state
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
