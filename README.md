@@ -186,8 +186,10 @@ Pick a bundle that matches how you work:
 
 ### Prerequisites
 
-- Python 3.12+
-- [`skilz`](https://pypi.org/project/skilz/) installed:
+- **An AI coding assistant** — [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex](https://openai.com/index/introducing-codex/)
+- **Python 3.12+**
+
+- [**skilz**](https://pypi.org/project/skilz/) — needed only if you install skills one by one:
 
 ```bash
 pip install skilz
@@ -197,11 +199,11 @@ pip install skilz
 
 ```bash
 # Claude Code
-uvx --from git+ssh://git@github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
+uvx --from git+https://github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
   analytics-ai-installer install analytics-core --agent claude --repo Khodzitcky-Vl/data-science-ai-superpowers
 
 # Codex
-uvx --from git+ssh://git@github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
+uvx --from git+https://github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
   analytics-ai-installer install analytics-core --agent codex --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
@@ -214,7 +216,7 @@ skilz install Khodzitcky-Vl/data-science-ai-superpowers/ds-analysis-plan --agent
 ### Install everything
 
 ```bash
-uvx --from git+ssh://git@github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
+uvx --from git+https://github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
   analytics-ai-installer install all-skills --agent codex --project --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
