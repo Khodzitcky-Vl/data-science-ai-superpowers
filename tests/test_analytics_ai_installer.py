@@ -38,8 +38,12 @@ def test_install_bundle_calls_skilz_for_each_skill(monkeypatch):
     assert calls
     assert calls[0] == [
         "skilz",
+        "-y",
         "install",
-        "acme/analytics-ai-skills/ds-using-superpowers",
+        "--git",
+        "https://github.com/acme/analytics-ai-skills",
+        "--skill",
+        "ds-using-superpowers",
         "--agent",
         "codex",
         "--project",

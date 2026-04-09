@@ -60,16 +60,16 @@ def require_skilz() -> None:
 def install_bundle(bundle: str, agent: str, project: bool, repo: str) -> int:
     require_skilz()
 
+    git_url = f"https://github.com/{repo}"
     for skill in BUNDLES[bundle]:
-        skill_id = f"{repo}/{skill}"
-        cmd = ["skilz", "install", skill_id, "--agent", agent]
+        cmd = ["skilz", "-y", "install", "--git", git_url, "--skill", skill, "--agent", agent]
         if project:
             cmd.append("--project")
 
-        print(f"Installing {skill_id}")
+        print(f"Installing {skill} from {git_url}")
         result = subprocess.run(cmd)
         if result.returncode != 0:
-            print(f"Failed to install {skill_id}", file=sys.stderr)
+            print(f"Failed to install {skill}", file=sys.stderr)
             return result.returncode
 
     print(f"Bundle '{bundle}' installed successfully for agent '{agent}'")
