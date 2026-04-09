@@ -200,6 +200,18 @@ uvx --from git+https://github.com/Khodzitcky-Vl/data-science-ai-superpowers.git 
   analytics-ai-installer install all-skills --agent codex --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
+### Install a single skill
+
+[**skilz**](https://pypi.org/project/skilz/) must be installed first:
+
+```bash
+pip install skilz
+```
+
+```bash
+skilz install --git https://github.com/Khodzitcky-Vl/data-science-ai-superpowers --skill ds-analysis-plan --agent codex
+```
+
 ---
 
 ## How Skills Work Together
