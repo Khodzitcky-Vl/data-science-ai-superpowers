@@ -197,25 +197,25 @@ pip install skilz
 
 ```bash
 # Claude Code
-uvx --from git+ssh://git@github.com/your-org/analytics-ai-skills.git \
-  analytics-ai-installer install analytics-core --agent claude --repo your-org/analytics-ai-skills
+uvx --from git+ssh://git@github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
+  analytics-ai-installer install analytics-core --agent claude --repo Khodzitcky-Vl/data-science-ai-superpowers
 
 # Codex
-uvx --from git+ssh://git@github.com/your-org/analytics-ai-skills.git \
-  analytics-ai-installer install analytics-core --agent codex --repo your-org/analytics-ai-skills
+uvx --from git+ssh://git@github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
+  analytics-ai-installer install analytics-core --agent codex --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
 ### Install a single skill
 
 ```bash
-skilz install your-org/analytics-ai-skills/ds-analysis-plan --agent codex
+skilz install Khodzitcky-Vl/data-science-ai-superpowers/ds-analysis-plan --agent codex
 ```
 
 ### Install everything
 
 ```bash
-uvx --from git+ssh://git@github.com/your-org/analytics-ai-skills.git \
-  analytics-ai-installer install all-skills --agent codex --project --repo your-org/analytics-ai-skills
+uvx --from git+ssh://git@github.com/Khodzitcky-Vl/data-science-ai-superpowers.git \
+  analytics-ai-installer install all-skills --agent codex --project --repo Khodzitcky-Vl/data-science-ai-superpowers
 ```
 
 ---
