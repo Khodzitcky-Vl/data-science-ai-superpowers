@@ -26,20 +26,20 @@ Task tool (general-purpose):
     **DO NOT:**
     - Trust the summary at face value
     - Assume the right unit or denominator was used
-    - Accept "close enough" statistical substitutions
+    - Accept “close enough” statistical substitutions
 
     **DO:**
     - Read the actual notebook, query, or output
     - Compare implementation to requirements line by line
-    - Check for missing validations, extra analyses, or altered definitions
+    - Check for missing core diagnostics at the requested validation level, extra analyses, or altered definitions
 
     ## Your Job
 
     Verify:
 
     **Missing requirements:**
-    - Were all requested checks executed?
-    - Were any required invariants, SRM checks, or robustness checks skipped?
+    - Were all requested core diagnostics executed?
+    - Were any required invariants, SRM checks, or decision-protecting robustness checks skipped?
     - Did the worker claim something was validated without actually validating it?
 
     **Extra or distorted work:**

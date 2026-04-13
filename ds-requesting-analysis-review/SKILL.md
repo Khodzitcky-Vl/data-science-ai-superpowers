@@ -13,12 +13,12 @@ Request review before publishing, socializing, or escalating a result. After rev
 
 Dispatch an analysis-reviewer subagent to catch methodological errors before they become business decisions.
 
-**Core principle:** Review early, review often.
+**Core principle:** Review the work that can change decisions. Do not turn light exploratory tasks into review-heavy process by default.
 
 ## When to Request Review
 
 **Mandatory:**
-- After each task in `ds-subagent-driven-analysis`
+- After `standard` or `strict` tasks in `ds-subagent-driven-analysis` that affect final conclusions
 - After completing a major experiment or validation study
 - Before publishing a final conclusion or recommendation
 
@@ -26,6 +26,7 @@ Dispatch an analysis-reviewer subagent to catch methodological errors before the
 - When stuck on interpretation
 - Before redesigning a metric
 - After fixing a complex analytical bug
+- After a `light` task if a risk signal appears: unit mismatch, denominator drift, SRM, invariant failure, stale cache, leakage risk, or narrative/output disagreement
 
 ## Review Package
 
@@ -35,6 +36,7 @@ Provide:
 - Hypothesis and experiment unit
 - Metric definitions and final formulas
 - Data window and exclusions
+- Validation level and compact diagnostic evidence
 - Notebook, SQL, and exported result tables
 - Summary of assumptions, limitations, and open questions
 
@@ -45,7 +47,7 @@ Provide:
 - Statistical method choice
 - Sensitivity to outliers, tails, and segment mix
 - Interpretation of confidence intervals and practical significance
-- Reproducibility of the final result
+- Reproducibility appropriate to the validation level; final results require strict evidence
 
 ## How to Request
 

@@ -11,24 +11,44 @@ Validate the metric before trusting the experiment. A metric is acceptable only 
 
 **Typical triggers:** unstable lift, denominator drift, SRM, invariant failure, heavy tails, metric sign flips after filter changes
 
-## Validation Checklist
+Metric validation should follow the shared validation budget from `ds-using-superpowers`. Do the minimum checks needed to protect the decision, then escalate only when risk signals appear.
+
+## Minimum Checks
 
 - Definition: numerator, denominator, filters, null handling
 - Unit alignment: metric computed at the same level as inference
-- Invariance: pre-treatment attributes stay balanced across groups
-- Sensitivity: metric can plausibly move under the treatment
-- Robustness: tails, winsorization, zero inflation, missingness
-- Leakage: metric or covariates do not use post-treatment information improperly
-- Operational quality: logging completeness, delayed events, backfills
+- Denominator sanity: counts by group and day where relevant
+- Missingness overview for numerator, denominator, and key covariates
+- Interpretability: metric can plausibly move under the treatment and maps to the business question
 
-## Core Tests
+For exploratory work, these checks can be one compact diagnostic table plus a short interpretation note.
+
+## Escalate When
+
+- Sample ratio, invariant, or pre-period balance looks suspicious
+- Denominator drifts by group, day, client, hotel, or traffic source
+- Metric flips sign after a small reasonable filter change
+- A few clients, hotels, partners, or requests drive most of the lift or variance
+- Control and treatment have different missingness patterns
+- The metric or covariate may use post-treatment information
+- Logging gaps, delayed events, or backfills may affect the result
+
+## Standard Checks
 
 - Count uniqueness by intended unit
-- Check denominator drift by group and by day
-- Plot distribution, not only the mean
-- Compare pre-period balance and sample ratio
-- Quantify outlier contribution to lift and variance
-- Recompute with alternative reasonable definitions
+- Compare pre-period balance and sample ratio where assignment groups exist
+- Plot the primary metric distribution, not only the mean
+- Quantify outlier contribution to the primary estimate or variance
+
+## Optional Robustness
+
+Use these when the escalation triggers appear or the result is decision-ready:
+
+- Recompute with one or two alternative reasonable definitions
+- Check tails, winsorization, zero inflation, and missingness sensitivity
+- Sensitivity analysis for alternative definitions or segment mix
+- Leakage: metric or covariates do not use post-treatment information improperly
+- Operational quality: logging completeness, delayed events, backfills
 
 ## Methods Notes
 

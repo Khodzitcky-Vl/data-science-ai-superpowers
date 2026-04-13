@@ -13,7 +13,9 @@ When the artifact is a notebook project, prefer improving the notebook in place.
 
 In notebooks, verification should be reader-facing first: emit summary tables, manifests, or diagnostic cells with explicit pass/fail columns. Avoid scattered fail-fast exceptions. If strict enforcement is needed, put it in one final optional validation cell.
 
-Execution should preserve runtime observability from the plan. Do not let long loops, chunked transforms, or SQL steps run silently; default to `tqdm` for iterable work and add visible status or timing output for heavier steps.
+Use the plan's validation level. A `light` task needs compact diagnostics, a `standard` task needs decision-protecting checks, and a `strict` task needs full evidence. Do not expand validation beyond the selected level unless a risk signal appears.
+
+Execution should preserve runtime observability from the plan without polluting saved notebook output. Do not let long loops, chunked transforms, or SQL steps run silently, but avoid nested or high-frequency progress bars that render as hundreds of output lines.
 
 **Core principle:** Batch execution with checkpoints for methodological review.
 
@@ -39,7 +41,7 @@ If a batch contains several tasks already marked `parallel-safe`, use `ds-dispat
 For each task:
 1. Mark as in progress
 2. Follow each step exactly
-3. Run the verification specified in the plan
+3. Run the verification specified in the plan at the selected validation level
 4. Mark as completed
 
 ### Step 3: Report
@@ -72,17 +74,18 @@ Each checkpoint should include:
 
 - What queries or notebook sections ran
 - What tables or plots were produced
-- What validation checks passed or failed
+- What compact diagnostic evidence passed, failed, or triggered escalation
 - What changed in the current interpretation
 - For notebook work, visible verification artifacts such as summary tables, manifests, or diagnostic cells instead of interleaved fail-fast exceptions
 - What runtime progress signals were added or observed for long-running SQL, loops, or heavy notebook sections
 
 ## Runtime Observability
 
-- Default to `from tqdm.auto import tqdm` for loops, chunked pandas work, batch API calls, and other iterable execution
+- Use `from tqdm.auto import tqdm` for loops, chunked pandas work, batch API calls, and other iterable execution only when it renders as a single updating bar in the target notebook environment
 - For SQL or remote jobs, show whatever the system can expose: query label, stage label, elapsed time, polling status, job id, chunk count, or row-count checkpoints
 - If the tool has no native progress API, add concise stage-start and stage-finish messages with timings instead of leaving a blank cell or silent terminal wait
 - Keep progress output human-readable; avoid log spam that hides failures
+- Avoid nested `tqdm` in notebooks by default. For large inner loops, use one outer bar plus sparse checkpoints, or configure coarse `mininterval`, `miniters`, `leave=False`, or `disable=True` for inner bars.
 
 ## Stop and Ask For Help
 
@@ -104,12 +107,13 @@ Do not force through blockers.
 
 - Review plan critically first
 - Follow plan steps exactly
-- Do not skip verifications
+- Do not skip verification required by the selected validation level
 - Use `ds-dispatching-parallel-agents` only for explicitly independent tasks
 - Between batches: report and wait
 - Stop when blocked, do not guess
 - Keep one-off analytical logic inside the notebook unless an external module was explicitly justified in the plan
-- Use notebook reruns, SQL reruns, validation checks, and artifact inspection as verification evidence
+- Use notebook reruns, SQL reruns, compact diagnostics, and artifact inspection as verification evidence
+- Keep validation evidence proportional to the selected validation level; checks that do not protect the interpretation should not bloat the notebook
 - Add minimal comments only where the analytical intent is not obvious from the code itself
 - Prefer one short comment or markdown explanation before a non-obvious block over line-by-line narration
 - Comment non-obvious filters, exclusions, joins or dedup logic, metric definitions, variance-reduction blocks, and validation cells
@@ -117,7 +121,7 @@ Do not force through blockers.
 - Do not introduce unit-test or `pytest` workflow unless the task explicitly becomes software engineering
 - No special git-worktree procedure is required for this DS workflow
 - Treat runtime observability as part of execution quality, not as optional polish
-- Do not leave heavy loops or long SQL without visible progress; use `tqdm` by default and add status, timing, or row-count signals where `tqdm` does not apply
+- Do not leave heavy loops or long SQL without visible progress; use compact progress bars, status, timing, or row-count signals, and check that saved notebook outputs do not contain progress-line spam
 
 ## Common Mistakes
 

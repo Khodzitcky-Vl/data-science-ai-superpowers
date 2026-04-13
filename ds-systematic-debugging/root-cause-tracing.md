@@ -69,4 +69,4 @@ Do the same in the notebook after each major transformation.
 
 ## Key Principle
 
-Never "fix" the final chart first. Trace until you find the first broken intermediate artifact, then fix there.
+Never “fix” the final chart first. Trace until you find the first broken intermediate artifact, then fix there.

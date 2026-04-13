@@ -17,6 +17,8 @@ You are reviewing a data science analysis for methodological soundness and decis
 
 {PLAN_REFERENCE}
 
+Include the requested validation level when available: `light`, `standard`, or `strict`.
+
 ## Artifacts to Review
 
 - Notebook: {NOTEBOOK_PATH}
@@ -28,13 +30,13 @@ You are reviewing a data science analysis for methodological soundness and decis
 **Design and Causality:**
 - Randomization unit aligned with inference unit?
 - Exposure, metric denominator, and aggregation level consistent?
-- Guardrails and invariant checks defined?
+- Guardrails and invariant checks defined when required by the validation level or decision risk?
 - Leakage, interference, contamination, or novelty effects considered?
 
 **Statistics:**
 - Metric definitions precise and stable?
 - Method choice justified (cluster-aware inference, CUPED, linearization, bootstrap, robust summaries)?
-- Outliers, tails, missingness, and denominator drift handled explicitly?
+- Outliers, tails, missingness, and denominator drift handled at the depth required by the validation level?
 - Confidence intervals and effect sizes interpreted correctly?
 
 **Reproducibility:**
@@ -47,8 +49,8 @@ You are reviewing a data science analysis for methodological soundness and decis
 - Limitations documented?
 
 **Requirements:**
-- All requested checks completed?
-- No scope creep disguised as "nice extra analysis"?
+- Requested core diagnostics completed for the validation level?
+- No scope creep disguised as “nice extra analysis”?
 - Final recommendation matches evidence?
 
 ## Output Format
@@ -62,10 +64,10 @@ You are reviewing a data science analysis for methodological soundness and decis
 [Invalid causal claim, broken metric, wrong unit, unreproducible result, missing core validation]
 
 #### Important (Should Fix)
-[Weak robustness, unclear assumptions, insufficient sensitivity analysis, missing limitation, missing concise comments on non-obvious analytical logic]
+[Weak robustness for the selected validation level, unclear assumptions, insufficient sensitivity analysis when risk signals require it, missing limitation, missing concise comments on non-obvious analytical logic, key comparisons or statistical results presented table-only without a stated reason, markdown cells that describe only WHAT a section does without explaining WHY]
 
 #### Minor (Nice to Have)
-[Presentation clarity, extra plots, memo wording improvements, over-commented obvious code]
+[Presentation clarity, aesthetic improvements to existing charts (titles, color palette, layout), memo wording improvements, over-commented obvious code]
 
 **For each issue:**
 - Artifact reference

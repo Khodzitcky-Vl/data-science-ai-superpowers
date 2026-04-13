@@ -15,13 +15,16 @@ Notebook must optimize for analyst readability. Prefer diagnostic outputs over i
 
 Use this before `ds-verification-before-completion` if reruns are fragile or outputs depend on stale notebook state.
 
+Apply the shared validation budget from `ds-using-superpowers`. Reproducibility work should remove hidden state and stale outputs, not add a large validation framework to the notebook.
+
 ## Required Structure
 
 - Parameters at the top: dates, experiment ids, filters, paths, seeds
 - One source of truth for extracts and joins
 - Separate sections for extraction, validation, estimation, robustness, and conclusion
+- Keep validation sections compact; one diagnostic table or manifest is preferred when it covers the selected validation level
 - Notebook-local helper functions for one-off analysis logic
-- Visible progress for long-running cells: use `tqdm` for loops or chunked work and concise status output for long SQL or heavy transformations
+- Visible but compact progress for long-running cells: use `tqdm` only when it updates in place in the notebook environment; otherwise use concise stage, timing, row-count, or percentage checkpoints
 - Short markdown cells or block comments before genuinely non-obvious analytical sections
 - Final output cells that can be rerun without hidden state
 
@@ -38,13 +41,16 @@ Use this before `ds-verification-before-completion` if reruns are fragile or out
 - Comment non-obvious filters, exclusions, joins or dedup logic, metric definitions, and validation logic that a fresh analyst might misread
 - Do not scatter runtime assertions throughout an analyst-facing notebook; use visible verification outputs by default
 - Reserve exceptions for missing prerequisites or a final optional strict validation step
-- Do not leave long-running notebook cells opaque; the rerun should show progress via `tqdm`, stage labels, timing, or status cells so another analyst can tell that work is advancing
+- Do not leave long-running notebook cells opaque; the rerun should show progress via a compact progress bar, stage labels, timing, or status cells so another analyst can tell that work is advancing
+- Do not use nested or high-frequency `tqdm` bars when they create many saved output lines. For large inner loops, prefer one outer bar plus sparse checkpoints, or set coarse `mininterval`/`miniters`, `leave=False`, or `disable=True` for inner bars.
 
 ## Quick Checks
 
-- Restart kernel and rerun all
+- For final or strict claims: restart kernel and rerun all
+- For intermediate scoped claims: rerun the relevant section and state what remains unverified
 - Confirm outputs appear in the same order
 - Confirm long-running cells expose visible progress and do not look frozen during reruns
+- Confirm saved outputs are not polluted by hundreds of progress-bar refresh lines
 - Check that cached files are either regenerated or intentionally pinned
 - If the notebook imports external helper code, verify the dependency is justified, versioned, and not just a cleanliness refactor
 

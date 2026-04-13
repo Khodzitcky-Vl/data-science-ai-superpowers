@@ -2,7 +2,7 @@
 
 ## Overview
 
-Notebook and pipeline debugging often fail because analysts guess when data is ready: "the extract should be there by now", "the cache probably refreshed", "rerunning one more time will fix it".
+Notebook and pipeline debugging often fail because analysts guess when data is ready: “the extract should be there by now”, “the cache probably refreshed”, “rerunning one more time will fix it”.
 
 **Core principle:** Wait for the analytical condition you need, not for an arbitrary amount of time.
 
