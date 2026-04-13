@@ -11,21 +11,25 @@ No analytical conclusion without fresh evidence. If the notebook was not rerun u
 
 If reruns are brittle, cached, or order-dependent, use `ds-notebook-reproducibility` first.
 
-**Core principle:** Evidence before claims, always.
+Use the shared validation budget from `ds-using-superpowers`. Intermediate progress claims can use scoped verification. Final, significant, trustworthy, or decision-ready claims require strict verification.
+
+**Core principle:** Evidence before claims, always; scope the evidence to the claim unless the claim is final or decision-ready.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
 
 ## The Iron Law
 
 ```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+NO FINAL OR DECISION-READY CLAIMS WITHOUT FRESH STRICT VERIFICATION EVIDENCE
 ```
 
 If you have not run the verification in this message, you cannot claim the result is trustworthy.
 
+For intermediate progress updates, verify the relevant cells, query, or artifact before making the scoped claim. Do not imply the whole analysis is complete.
+
 ## Verification Gate
 
-Before any completion claim:
+Before any final, significant, trustworthy, or decision-ready claim:
 
 1. Rerun the relevant notebook cells or script entry point
 2. Confirm input window, filters, and experiment identifiers
@@ -36,12 +40,19 @@ Before any completion claim:
 
 Skip any step = not verified.
 
+For intermediate scoped claims:
+
+1. Rerun the relevant notebook cells, SQL, or script section
+2. Confirm the parameters needed for that specific claim
+3. Check the compact diagnostic artifact for the affected table, metric, or figure
+4. State the claim narrowly and name what remains unverified
+
 ## Common Failures
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
 | Experiment is significant | Fresh effect size, interval, and significance output | Old screenshot or p-value alone |
-| Metric is valid | Fresh denominator, unit, and robustness checks | "It looked stable earlier" |
+| Metric is valid | Fresh denominator, unit, and robustness checks | “It looked stable earlier” |
 | Notebook is reproducible | Clean rerun with explicit parameters | One successful run in dirty state |
 | Result is decision-ready | Primary result, limitations, and review completed | Best slice looks good |
 | Agent finished task | Artifacts checked independently | Agent summary alone |
@@ -115,6 +126,8 @@ Skip any step = not verified.
 - Publishing or socializing conclusions
 - Moving to the next task
 - Closing a review cycle
+
+Use scoped verification before intermediate status claims. Use strict verification before final claims.
 
 ## The Bottom Line
 

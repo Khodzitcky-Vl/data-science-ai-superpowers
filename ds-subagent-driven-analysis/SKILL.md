@@ -5,13 +5,13 @@ description: Use when executing a written analysis plan in the current session a
 
 # DS Subagent-Driven Analysis
 
-Execute plan by dispatching a fresh subagent per task, with two-stage review after each: methodology compliance review first, then reproducibility and interpretation review.
+Execute plan by dispatching a fresh subagent per task. Review depth follows the task's validation level: `light` tasks can rely on worker self-review plus compact artifacts unless risk signals appear; `standard` and `strict` tasks that affect final conclusions get methodology review first, then reproducibility and interpretation review.
 
 For notebook projects, the default expectation is still a self-contained notebook. Workers should not create extra helper modules for one-off analytical logic unless the task explicitly justifies that dependency.
 
-Workers must preserve runtime observability from the plan. Long loops, chunked jobs, and SQL-heavy steps should not run silently; default to `tqdm` for iterable work and add visible status or timing output elsewhere.
+Workers must preserve runtime observability from the plan without polluting saved notebook output. Long loops, chunked jobs, and SQL-heavy steps should not run silently, but nested or high-frequency progress bars should be avoided when they render as many output lines.
 
-**Core principle:** Fresh subagent per task + two-stage review (methodology then reproducibility/interpretation) = high quality, fast iteration
+**Core principle:** Fresh subagent per task, validation-budgeted review, and escalation on risk signals.
 
 **Use after:** `ds-analysis-plan`
 
@@ -42,7 +42,7 @@ digraph when_to_use {
 **vs. DS Executing Plans:**
 - Same session
 - Fresh subagent per task
-- Two-stage review after each task: methodology first, then reproducibility and interpretation
+- Review depth based on validation level and decision impact
 - Faster iteration without waiting for human review after every task
 
 ## Per-Task Flow
@@ -57,6 +57,7 @@ digraph process {
         "Analysis worker asks questions?" [shape=diamond];
         "Answer questions, provide context" [shape=box];
         "Analysis worker executes, reruns, self-reviews" [shape=box];
+        "Needs review? standard/strict, final-impact, or risk signal" [shape=diamond];
         "Dispatch methodology reviewer (./methodology-reviewer-prompt.md)" [shape=box];
         "Methodology reviewer confirms task matches spec?" [shape=diamond];
         "Analysis worker fixes methodological gaps" [shape=box];
@@ -76,7 +77,9 @@ digraph process {
     "Analysis worker asks questions?" -> "Answer questions, provide context" [label="yes"];
     "Answer questions, provide context" -> "Dispatch analysis worker (./analysis-worker-prompt.md)";
     "Analysis worker asks questions?" -> "Analysis worker executes, reruns, self-reviews" [label="no"];
-    "Analysis worker executes, reruns, self-reviews" -> "Dispatch methodology reviewer (./methodology-reviewer-prompt.md)";
+    "Analysis worker executes, reruns, self-reviews" -> "Needs review? standard/strict, final-impact, or risk signal";
+    "Needs review? standard/strict, final-impact, or risk signal" -> "Dispatch methodology reviewer (./methodology-reviewer-prompt.md)" [label="yes"];
+    "Needs review? standard/strict, final-impact, or risk signal" -> "Mark task complete" [label="no - light task with compact artifact"];
     "Dispatch methodology reviewer (./methodology-reviewer-prompt.md)" -> "Methodology reviewer confirms task matches spec?";
     "Methodology reviewer confirms task matches spec?" -> "Analysis worker fixes methodological gaps" [label="no"];
     "Analysis worker fixes methodological gaps" -> "Dispatch methodology reviewer (./methodology-reviewer-prompt.md)" [label="re-review"];
@@ -143,6 +146,14 @@ Reproducibility reviewer: ✅ Approved
 [Mark task complete]
 ```
 
+## Review Budget
+
+- `light`: worker self-review plus compact artifact is enough unless a risk signal appears
+- `standard`: use methodology review for tasks that affect final estimates, metric definitions, units, denominators, or required diagnostics; use reproducibility review when the task changes final tables, figures, or conclusions
+- `strict`: use both methodology and reproducibility review before marking complete
+
+Risk signals that escalate review: SRM, invariant failure, unit mismatch, denominator drift, sign flip, stale cache, missingness difference, outlier dominance, leakage risk, or narrative/output disagreement.
+
 ## Parallel Case
 
 When several tasks are truly independent:
@@ -156,18 +167,19 @@ When several tasks are truly independent:
 
 - Methodology review: unit alignment, metric correctness, statistical method, leakage, bias
 - Reproducibility review: rerun stability, parameter clarity, notebook self-containment, final tables or plots, wording of conclusions, whether non-obvious analytical logic has concise explanatory comments, and whether long-running work has visible progress signals
+- Reproducibility review should also check that saved notebook outputs are not polluted by hundreds of progress-bar refresh lines. Compact progress is required; progress spam is a reproducibility/readability issue.
 
 ## Advantages
 
 **vs. Manual execution:**
 - Fresh context per task
 - Questions surfaced before work begins
-- Review loops catch methodological drift early
+- Review loops catch methodological drift early when risk or decision impact justifies them
 
 **vs. DS Executing Plans:**
 - Same session
 - Continuous progress
-- Review checkpoints happen automatically
+- Review checkpoints happen automatically for `standard` or `strict` tasks that affect final conclusions
 
 ## Integration
 
@@ -186,7 +198,7 @@ When several tasks are truly independent:
 
 **Verification model:**
 - Rerun notebook or SQL steps
-- Check artifacts and validation outputs
+- Check compact artifacts and validation outputs at the selected validation level
 - Do not assume unit-test or `pytest` workflow
 - No special git-worktree setup is required
 
@@ -199,6 +211,7 @@ When several tasks are truly independent:
 - Parallel workers edit the same notebook or output table
 - Skip review loops after issues are found
 - Start reproducibility review before methodology review is green
-- Move to next task while either review has open issues
+- Move to next task while required review has open issues
 - A worker moves one-off notebook logic into a new `.py` helper module without explicit task justification
-- A worker leaves long loops, chunked transforms, or SQL-heavy tasks without `tqdm`, status output, or any other visible progress signal
+- A worker leaves long loops, chunked transforms, or SQL-heavy tasks without a visible progress signal
+- A worker uses nested or high-frequency `tqdm` bars that save hundreds of progress refresh lines in the notebook

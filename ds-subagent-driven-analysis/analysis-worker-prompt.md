@@ -33,7 +33,7 @@ Task tool (general-purpose):
     2. Keep one-off analytical logic inside the notebook unless the task explicitly justifies an external module
     3. Rerun relevant SQL or notebook steps
     4. Save or report the requested artifacts
-    5. Verify the outputs against the task requirements
+    5. Verify the outputs against the task requirements at the requested validation level
     6. Add minimal comments only where intent, methodology, or validation logic would otherwise be non-obvious
     7. Prefer one short comment or markdown explanation before a complex block over line-by-line narration
     8. Self-review before reporting back
@@ -47,9 +47,10 @@ Task tool (general-purpose):
     Review your work with fresh eyes.
 
     **Completeness:**
-    - Did I run every requested check?
+    - Did I run the requested core diagnostics for the task's validation level?
     - Did I produce every requested artifact?
-    - Did I miss a robustness check or validation step?
+    - Did I miss a decision-protecting robustness check or validation step?
+    - Did any risk signal appear that should escalate validation depth?
 
     **Methodology:**
     - Is the unit of analysis correct?
@@ -64,13 +65,26 @@ Task tool (general-purpose):
     - Did I avoid commenting obvious operations line by line?
     - Do the written conclusions match the outputs?
 
+    **Readability:**
+    - For every group comparison, distribution, time trend, statistical result,
+      or correlation and variable relationship — did I add a chart?
+    - For dense tables (5+ rows, multiple metrics) — did I add a supporting chart,
+      or note "table-only" with an acceptable reason?
+    - If I noted "table-only", is the reason acceptable? (Acceptable: ≤3 rows,
+      exact integers a chart would distort, single-number summary. Not acceptable:
+      "table is clear enough.")
+    - Does each major analytical section have a markdown cell immediately preceding
+      it that explains WHY this step is needed (not just what it does)?
+    - Are the plot titles, axis labels, and annotations sufficient for a
+      colleague reading without running the notebook?
+
     If you find issues during self-review, fix them before reporting.
 
     ## Report Format
 
     When done, report:
     - What you analyzed
-    - What you reran and what passed
+    - What you reran and what compact diagnostics passed, failed, or triggered escalation
     - Artifacts produced
     - Files changed
     - Self-review findings
